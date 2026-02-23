@@ -199,7 +199,7 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 
 <div align="center">
 
-**Built with ❤️ by [Om Sudhamsh Padma](https://github.com/omsudhamsh)**
+**Built by [Om Sudhamsh Padma](https://github.com/omsudhamsh)**
 
 ⭐ Star this repo if you found it useful!
 
