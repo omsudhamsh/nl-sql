@@ -4,6 +4,9 @@ from pydantic import BaseModel
 from app.llm import generate_sql
 from app.utils import run_query
 from app.db import init_db
+from fastapi import UploadFile, File
+from app.file_handler import save_csv_to_db
+uploaded_schema = None
 
 app = FastAPI()
 
@@ -24,7 +27,15 @@ def startup():
 
 @app.post("/query")
 def query_db(q: Question):
-    sql = generate_sql(q.question)
+    global uploaded_schema
+
+    if not uploaded_schema:
+        return {"error": "Please upload a CSV file first."}
+
+    sql = generate_sql(q.question, uploaded_schema)
+
+    print("Generated SQL:", sql)
+
     result = run_query(sql)
 
     return {
@@ -39,3 +50,13 @@ def home():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("app.main:app", host="0.0.0.0", port=8000)
+
+@app.post("/upload")
+async def upload_csv(file: UploadFile = File(...)):
+    global uploaded_schema
+    uploaded_schema = save_csv_to_db(file)
+
+    return {
+        "message": "File uploaded successfully",
+        "schema": uploaded_schema
+    }

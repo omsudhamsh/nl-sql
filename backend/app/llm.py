@@ -7,26 +7,19 @@ load_dotenv()
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 
-def generate_sql(question):
-    schema = """
-    Table: customers
-    Columns:
-    id INTEGER PRIMARY KEY
-    name TEXT
-    amount INTEGER
-    date TEXT
-    """
-
+def generate_sql(question, schema):
     prompt = f"""
     Convert natural language to SQL.
 
     Database schema:
-    {schema}
+    Table name: {schema['table']}
+    Columns: {', '.join(schema['columns'])}
 
     Rules:
     - Only generate SELECT queries.
     - No explanation.
-    - Only SQL query output.
+    - Output only SQL.
+    - Use exact column names provided.
 
     Question:
     {question}
