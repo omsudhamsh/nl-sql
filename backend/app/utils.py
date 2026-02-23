@@ -1,5 +1,7 @@
-from sqlalchemy import text
-from app.db import engine
+from sqlalchemy import create_engine, text
+
+# Engine for uploaded CSV database
+engine = create_engine("sqlite:///./uploaded_data.db")
 
 
 def clean_sql(sql):
