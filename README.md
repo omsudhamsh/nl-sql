@@ -1,18 +1,17 @@
 <div align="center">
 
-# 🗃️ NL → SQL
+# 🤖 AI Data Analyst
 
-### Natural Language to SQL Generator
-
-Convert plain English questions into SQL queries instantly using AI.
+### Upload any CSV → Ask questions in plain English → Get SQL & results instantly
 
 [![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Visit_App-6366f1?style=for-the-badge)](https://nl-sql-teal.vercel.app/)
 [![GitHub Stars](https://img.shields.io/github/stars/omsudhamsh/nl-sql?style=for-the-badge&color=f59e0b)](https://github.com/omsudhamsh/nl-sql/stargazers)
+[![Fork](https://img.shields.io/github/forks/omsudhamsh/nl-sql?style=for-the-badge&color=818cf8)](https://github.com/omsudhamsh/nl-sql/fork)
 [![License](https://img.shields.io/github/license/omsudhamsh/nl-sql?style=for-the-badge&color=22c55e)](LICENSE)
 
 <br/>
 
-![NL-SQL Hero](assets/screenshot-hero.png)
+![AI Data Analyst](assets/screenshot-hero.png)
 
 </div>
 
@@ -20,12 +19,14 @@ Convert plain English questions into SQL queries instantly using AI.
 
 ## ✨ Features
 
-- 🧠 **AI-Powered** — Converts natural language to SQL using Groq's LLaMA 3.1 model
-- ⚡ **Instant Results** — Get SQL queries and database results in seconds
+- 📂 **CSV Upload** — Upload any `.csv` file as your dataset
+- 🧠 **AI-Powered** — Converts natural language to SQL using Groq's LLaMA 3.1
+- 📊 **Instant Results** — See query results in a clean, interactive table
+- 🔍 **Dynamic Schema** — Auto-detects table structure from uploaded CSV
 - 📋 **Copy SQL** — One-click copy for generated queries
 - ⌨️ **Keyboard Shortcut** — `Ctrl + Enter` to submit
-- 🌙 **Modern Dark UI** — Premium glassmorphism design with smooth animations
-- 🔒 **Safe Queries** — Only `SELECT` statements are allowed (no data modification)
+- 🌙 **Premium Dark UI** — Modern design with smooth animations
+- 🔒 **Safe Queries** — Only `SELECT` statements allowed
 
 ---
 
@@ -33,9 +34,9 @@ Convert plain English questions into SQL queries instantly using AI.
 
 <div align="center">
 
-| Ask a Question | Get Results |
+| Upload Dataset | Query Results |
 |:-:|:-:|
-| ![Hero](assets/screenshot-hero.png) | ![Results](assets/screenshot-results.png) |
+| ![Upload](assets/screenshot-hero.png) | ![Results](assets/screenshot-results.png) |
 
 </div>
 
@@ -49,40 +50,39 @@ Convert plain English questions into SQL queries instantly using AI.
 │                                                         │
 │   React + Vite + Tailwind CSS                           │
 │   ┌───────────────────────────────────────────┐         │
-│   │  User types natural language question     │         │
-│   │  ───────────────────────────────────────   │         │
-│   │  "Show customers with amount > 10000"     │         │
-│   └────────────────────┬──────────────────────┘         │
-│                        │ POST /query                    │
-└────────────────────────┼────────────────────────────────┘
-                         │
-                         ▼
+│   │  Step 1: Upload CSV file                  │         │
+│   │  Step 2: Ask question in plain English    │         │
+│   └──────────┬────────────────┬───────────────┘         │
+│              │ POST /upload   │ POST /query             │
+└──────────────┼────────────────┼─────────────────────────┘
+               │                │
+               ▼                ▼
 ┌─────────────────────────────────────────────────────────┐
 │                   BACKEND (Render)                       │
 │                                                         │
 │   FastAPI + Python                                      │
 │   ┌─────────────────┐    ┌──────────────────────┐       │
-│   │   /query API    │───▶│  Groq LLM (LLaMA 3) │       │
-│   │   Endpoint      │◀───│  Generate SQL        │       │
-│   └────────┬────────┘    └──────────────────────┘       │
-│            │                                            │
-│            ▼                                            │
-│   ┌─────────────────┐                                   │
-│   │   SQLAlchemy    │                                   │
-│   │   Execute SQL   │                                   │
-│   │   on SQLite DB  │                                   │
-│   └─────────────────┘                                   │
+│   │  /upload API    │    │  /query API          │       │
+│   │  CSV → SQLite   │    │  Question → Groq LLM │       │
+│   │  via Pandas     │    │  → SQL → Execute     │       │
+│   └────────┬────────┘    └──────────┬───────────┘       │
+│            │                        │                   │
+│            ▼                        ▼                   │
+│   ┌─────────────────────────────────────────┐           │
+│   │   SQLite Database (uploaded_data.db)    │           │
+│   │   Dynamic table from uploaded CSV       │           │
+│   └─────────────────────────────────────────┘           │
 └─────────────────────────────────────────────────────────┘
 ```
 
-### Request Flow
+### How It Works
 
-1. User enters a **natural language question** in the frontend
-2. Frontend sends a `POST` request to the FastAPI backend
-3. Backend forwards the question to **Groq AI (LLaMA 3.1-8B)**
-4. LLM generates a `SELECT` SQL query based on the database schema
-5. Backend **executes the SQL** on the SQLite database
-6. Results are returned as JSON and displayed in a clean table
+1. **Upload** a CSV file — backend saves it to a SQLite database using Pandas
+2. **Schema auto-detection** — column names and types are extracted automatically
+3. **Ask a question** in natural language (e.g., *"Show employees with salary > 50000"*)
+4. **Groq AI (LLaMA 3.1-8B)** generates a `SELECT` SQL query using the detected schema
+5. **Backend executes the SQL** on the SQLite database
+6. **Results** are returned as JSON and displayed in a styled table
 
 ---
 
@@ -93,7 +93,7 @@ Convert plain English questions into SQL queries instantly using AI.
 | **Frontend** | React 19, Vite 7, Tailwind CSS 4 | UI & styling |
 | **Backend** | FastAPI, Python | REST API |
 | **AI/LLM** | Groq Cloud, LLaMA 3.1-8B | NL → SQL conversion |
-| **Database** | SQLite, SQLAlchemy | Data storage & querying |
+| **Database** | SQLite, SQLAlchemy, Pandas | Dynamic data storage |
 | **Deployment** | Vercel (frontend), Render (backend) | Hosting |
 
 ---
@@ -161,16 +161,17 @@ The app will be available at `http://localhost:5173`
 nl-sql/
 ├── backend/
 │   ├── app/
-│   │   ├── main.py          # FastAPI app + CORS + routes
-│   │   ├── llm.py           # Groq LLM integration
+│   │   ├── main.py          # FastAPI app, CORS, routes (/upload, /query)
+│   │   ├── llm.py           # Groq LLM integration (dynamic schema)
 │   │   ├── db.py            # SQLite database setup
+│   │   ├── file_handler.py  # CSV → SQLite via Pandas
 │   │   └── utils.py         # SQL execution + safety checks
 │   ├── requirements.txt
 │   └── .env                 # API keys (not committed)
 │
 ├── frontend/nl-sql/
 │   ├── src/
-│   │   ├── App.jsx          # Main application component
+│   │   ├── App.jsx          # Main app (upload + query UI)
 │   │   ├── index.css         # Premium dark theme styles
 │   │   └── main.jsx         # React entry point
 │   ├── index.html
@@ -185,9 +186,10 @@ nl-sql/
 
 ## 🔒 Safety
 
-- Only `SELECT` queries are allowed — the backend rejects any `INSERT`, `UPDATE`, `DELETE`, or `DROP` statements
-- SQL is sanitized to remove markdown formatting from LLM output
-- CORS is configured for secure cross-origin requests
+- Only `SELECT` queries are allowed — the backend rejects `INSERT`, `UPDATE`, `DELETE`, etc.
+- SQL output is sanitized to strip markdown formatting from LLM responses
+- CORS configured for secure cross-origin requests
+- API key stored in `.env` (never committed to repo)
 
 ---
 
@@ -199,7 +201,7 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 
 <div align="center">
 
-**Built by [Om Sudhamsh Padma](https://github.com/omsudhamsh)**
+**Built with ❤️ by [Om Sudhamsh Padma](https://github.com/omsudhamsh)**
 
 ⭐ Star this repo if you found it useful!
 
