@@ -47,7 +47,7 @@ function App() {
     setResults([]);
 
     try {
-      const res = await axios.post("http://127.0.0.1:8000/query", { question });
+      const res = await axios.post("https://nl-sql-w3fj.onrender.com/query", { question });
 
       const cleanedSQL = res.data.generated_sql
         .replace(/```sql/g, "")
