@@ -73,3 +73,5 @@ uvicorn
 groq
 python-dotenv
 sqlalchemy
+pandas
+python-multipart
